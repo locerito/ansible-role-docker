@@ -19,7 +19,9 @@
     state: latest
   with_items:
     - docker-engine
-    - python-docker-py
 
 - name: making sure pip installed
   shell: curl -sSL https://bootstrap.pypa.io/get-pip.py | python
+
+- name: Install docker-py
+  pip: name=docker-py version=1.10.6 state=present
