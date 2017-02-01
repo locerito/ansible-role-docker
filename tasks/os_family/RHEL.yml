@@ -1,19 +1,27 @@
 ---
 
-- name: install yum repo
-  copy:
-    owner=root
-    src=files/docker.repo
-    dest=/etc/yum.repos.d/docker.repo
+- name: install yum-utils
+  yum:
+    name: yum-utils
+    state: present
+
+- name: install docker repository
+  shell:  yum-config-manager --add-repo https://docs.docker.com/engine/installation/linux/repo_files/centos/docker.repo
+
+- name: make sure docker from distro is not installed
+  yum:
+    name: docker
+    state: absent
 
 - name: Install docker
-  yum: name=docker-engine state=present
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - docker-engine
 
 - name: making sure pip installed
-  shell: which pip || curl -sSL https://bootstrap.pypa.io/get-pip.py | python
-
-- name: Install docker-compose
-  pip: name=docker-compose state=present
+  shell: curl -sSL https://bootstrap.pypa.io/get-pip.py | python
 
 - name: Install docker-py
-  pip: name=docker-py version=1.8.1 state=forcereinstall
+  pip: name=docker-py version=1.1.0 state=forcereinstall
