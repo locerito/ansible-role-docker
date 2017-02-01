@@ -7,6 +7,3 @@
 - name: Run the RedHat based install
   include: "RHEL.yml"
   when: ansible_distribution != "Fedora"
-
-- name: Install docker-compose through pip
-  pip: name=docker-compose state=latest
